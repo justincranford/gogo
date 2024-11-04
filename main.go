@@ -3,6 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
+	"gogo/mathsutil"
+	"gogo/stringsutil"
+	"gogo/timesutil"
 	"io"
 	"log"
 	"net/http"
@@ -13,7 +16,7 @@ import (
 )
 
 func main() {
-	mode := flag.String("mode", "server", "Mode to run: 'server' or 'client'")
+	mode := flag.String("mode", "client", "Mode to run: 'server' or 'client'")
 	hostname := flag.String("host", "localhost", "Hostname to bind or connect to")
 	port := flag.Int("port", 8080, "Port to bind or connect to")
 	path := flag.String("path", "/", "Path to request (for client mode)")
@@ -33,6 +36,8 @@ func main() {
 		startServer(*hostname, *port)
 	} else if *mode == "client" {
 		startClient(*hostname, *port, *path)
+	} else if *mode == "test" {
+		doSomeTests()
 	} else {
 		log.Fatalf("Invalid mode: %s. Use 'server' or 'client'.\n", *mode)
 	}
@@ -98,4 +103,12 @@ func startClient(hostname string, port int, path string) {
 
 	body, _ := io.ReadAll(resp.Body)
 	log.Printf("Response from %s:\n%s\n", path, string(body))
+}
+
+func doSomeTests() {
+	stringsutil.PrintTests()
+	timesutil.TimeTests()
+	stringsutil.SwitchTests()
+	stringsutil.PalindromeTests()
+	mathsutil.FibonacciTests()
 }
